@@ -1,7 +1,7 @@
 {% extends 'blog/base.html' %}
 {% block content %}
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-md-8 mt-3 left">
             {% for post in post_list %}
             <div class="card mb-4">
@@ -9,7 +9,7 @@
                     <h2 class="card-title">{{ post.title }}</h2>
                     <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
                     <p class="card-text">{{post.content|slice:":200" }}</p>
-                    <a href="{% url 'blog:post_detail' post.slug %}" class="btn btn-dark">Read More &rarr;</a>
+                    <a href="{% url 'blog:post_detail' post.slug %}" class="btn btn-dark">Leer mas &rarr;</a>
                 </div>
             </div>
             {% endfor %}

@@ -1,0 +1,50 @@
+{% load crispy_forms_tags %}
+
+{% block sidebar %}
+
+<style>
+        .card{
+            box-shadow: 0 16px 48px #E3E7EB;
+        }
+
+</style>
+
+<!-- Sidebar Widgets Column -->
+<div class="col-md-4 float-right">
+    <div class="card my-4">
+        <h5 class="card-header">Comments</h5>
+        <div class="card-body">
+            {% if comments %}
+                <h6>{{ comments.count }} Comments</h6>
+                {% for comment in comments %}
+                <div class="comment-sidebar mb-3">
+                    <p class="font-weight-bold mb-0">
+                        {{ comment.name }}
+                        <small class="text-muted">
+                            {{ comment.created_on|date:"F d, Y" }}
+                        </small>
+                    </p>
+                    <p class="comment-text">{{ comment.body|truncatewords:30 }}</p>
+                    <hr>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Comment Form -->
+            <h6 class="mt-4">Leave a comment</h6>
+            {% if new_comment %}
+                <div class="alert alert-success" role="alert">
+                    Your comment is awaiting moderation
+                </div>
+            {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    {{ comment_form|crispy }}
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">Submit</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock sidebar %}

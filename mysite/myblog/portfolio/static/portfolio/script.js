@@ -14,16 +14,38 @@ document.querySelectorAll('.icono').forEach((btn, index) => {
 
       // Si es la ventana del blog, cargar los posts
       if (idVentana === 'ventana-blog') {
-        fetch('/blog/')
-          .then(response => response.text())
-          .then(html => {
-            document.getElementById('blogContent').innerHTML = html;
-            addBlogLinksListeners();
-          });
+        loadEmbeddedBlog();
       }
     }
   });
 });
+
+// Nueva función para cargar el blog
+function loadEmbeddedBlog() {
+  fetch('/blog/embedded/')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('blogContent').innerHTML = html;
+      addEmbeddedBlogListeners();
+    });
+}
+
+// Nueva función para manejar los enlaces del blog embebido
+function addEmbeddedBlogListeners() {
+  document.querySelectorAll('.read-more-btn').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const slug = this.getAttribute('data-slug');
+      fetch(`/blog/embedded/${slug}/`)
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('blogContent').innerHTML = html;
+          addEmbeddedBlogListeners();
+        });
+    });
+  });
+}
+
 
 function cerrarVentana(id) {
   const ventana = document.getElementById(id);

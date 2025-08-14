@@ -63,3 +63,17 @@ def post_detail(request, slug):
                                            'comments': comments,
                                            'new_comment': new_comment,
                                            'comment_form': comment_form})
+
+def embedded_blog(request):
+    post_list = Post.objects.filter(status=1).order_by('-created_on')
+    return render(request, 'blog/embedded.html', {'post_list': post_list})
+
+def embedded_post_detail(request, slug):
+    post = get_object_or_404(Post, slug=slug)
+    comments = post.comments.filter(active=True)
+    comment_form = CommentForm()
+    return render(request, 'blog/embedded_detail.html', {
+        'post': post,
+        'comments': comments,
+        'comment_form': comment_form
+    })

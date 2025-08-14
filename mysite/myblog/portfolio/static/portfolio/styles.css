@@ -1091,3 +1091,209 @@ body:has(#cambio-tema:checked) .flecha:hover {
     height: 35px;
   }
 }
+
+.ventana-blog {
+  width: 1050px;
+  height: 600px;
+  background: var(--fondo-sobremi);
+  position: relative  ;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+  display: flex;            /* CLAVE 1: Debe ser un contenedor flex */
+  flex-direction: column;   /* CLAVE 2: Para apilar la barra y el contenido */
+  overflow: hidden;         /* Correcto, para que nada se salga de la ventana */
+  z-index: 1000;
+  animation: flotar 3s ease-in-out infinite;
+  transition: all 0.3s ease-in-out;
+}
+
+
+.embedded-blog {
+  font-family: "Josefin Sans", sans-serif;
+  color: var(--color-texto-principal);
+  padding: 20px;
+  /* ¡SIN height, SIN flex, SIN overflow aquí! */
+}
+
+.embedded-blog .blog-header h2 {
+  text-align: center;
+  color: #00c3ff;
+  font-size: 32px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #00c3ff;
+  padding-bottom: 10px;
+}
+
+.embedded-blog .blog-post-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.embedded-blog .blog-post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 195, 255, 0.2);
+}
+
+.embedded-blog .post-title {
+  color: var(--color-titulo-principal);
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.embedded-blog .post-meta {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.embedded-blog .post-excerpt {
+  line-height: 1.6;
+  margin-bottom: 20px;
+  overflow-wrap: break-word; 
+}
+
+.embedded-blog .read-more-btn,
+.embedded-blog .back-btn {
+  background: linear-gradient(135deg, #00c3ff, #6e00ff);
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.embedded-blog .read-more-btn:hover,
+.embedded-blog .back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 195, 255, 0.4);
+}
+
+.embedded-blog .back-btn {
+  margin-bottom: 20px;
+}
+
+.embedded-blog .post-article .post-title {
+  font-size: 28px;
+  margin-bottom: 15px;
+}
+
+.embedded-blog .post-content {
+  line-height: 1.8;
+  margin-bottom: 30px;
+  overflow-wrap: break-word;
+  padding-bottom: 20px; /* Añadir espacio al final del contenido */
+}
+
+.embedded-blog .comments-section h3 {
+  color: #00c3ff;
+  margin-bottom: 20px;
+}
+
+.embedded-blog .comment {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.embedded-blog .comment strong {
+  color: #00c3ff;
+}
+
+.embedded-blog .comment-date {
+  color: #888;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.embedded-blog .comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.embedded-blog .comment-form input,
+.embedded-blog .comment-form textarea {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-texto-principal);
+  font-family: "Josefin Sans", sans-serif;
+}
+
+.embedded-blog .comment-form button {
+  background: linear-gradient(135deg, #00c3ff, #6e00ff);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Tema oscuro para el blog embebido */
+body:has(#cambio-tema:checked) .embedded-blog .blog-post-card {
+  background: rgba(32, 32, 32, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body:has(#cambio-tema:checked) .embedded-blog .post-meta {
+  color: #aaa;
+}
+
+body:has(#cambio-tema:checked) .embedded-blog .comment {
+  background: rgba(32, 32, 32, 0.8);
+}
+
+body:has(#cambio-tema:checked) .embedded-blog .comment-form input,
+body:has(#cambio-tema:checked) .embedded-blog .comment-form textarea {
+  background: rgba(32, 32, 32, 0.8);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Personalizar la barra de scroll para navegadores WebKit (Chrome, Safari, etc.) */
+.embedded-blog::-webkit-scrollbar {
+  width: 8px; /* Ancho de la barra */
+}
+
+.embedded-blog::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1); /* Color del fondo de la barra */
+  border-radius: 10px;
+}
+
+.embedded-blog::-webkit-scrollbar-thumb {
+  background-color: #00c3ff; /* Color del "pulgar" o la parte móvil */
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.embedded-blog::-webkit-scrollbar-thumb:hover {
+  background-color: #00a0d1; /* Color al pasar el mouse */
+}
+#blogContent {
+  position: absolute; /* Se posicionará relativo a la .ventana */
+  top: 40px;          /* Empieza 40px desde arriba (la altura de .barra-arriba) */
+  bottom: 0;          /* Termina en el borde de abajo de la ventana */
+  left: 0;            /* Empieza en el borde izquierdo */
+  right: 0;           /* Termina en el borde derecho */
+  overflow-y: auto;   /* Y AHORA SÍ, crea el scroll cuando sea necesario */
+}

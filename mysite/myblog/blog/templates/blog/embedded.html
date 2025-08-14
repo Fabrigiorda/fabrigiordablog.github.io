@@ -1,0 +1,16 @@
+<div class="embedded-blog">
+    <div class="blog-header">
+        <h2>Mi Blog</h2>
+    </div>
+    
+    <div class="blog-posts">
+        {% for post in post_list %}
+        <div class="blog-post-card">
+            <h3 class="post-title">{{ post.title }}</h3>
+            <p class="post-meta">{{ post.author }} | {{ post.created_on|date:"d/m/Y" }}</p>
+            <p class="post-excerpt">{{ post.content|slice:":200"|striptags }}</p>
+            <a href="#" class="read-more-btn" data-slug="{{ post.slug }}">Leer más &rarr;</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>

@@ -11,6 +11,16 @@ document.querySelectorAll('.icono').forEach((btn, index) => {
       void ventana.offsetWidth; 
       ventana.classList.add('abriendo');
       ventanasAbiertas[idVentana] = true;
+
+      // Si es la ventana del blog, cargar los posts
+      if (idVentana === 'ventana-blog') {
+        fetch('/blog/')
+          .then(response => response.text())
+          .then(html => {
+            document.getElementById('blogContent').innerHTML = html;
+            addBlogLinksListeners();
+          });
+      }
     }
   });
 });
@@ -153,3 +163,32 @@ document.addEventListener('click', (e) => {
     }
   });
 });
+
+function openBlogModal() {
+  document.getElementById('blogModal').style.display = 'block';
+  fetch('/blog/') // Ajusta la URL si tu blog está en otra ruta
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('blogContent').innerHTML = html;
+      addBlogLinksListeners();
+    });
+}
+
+function closeBlogModal() {
+  document.getElementById('blogModal').style.display = 'none';
+}
+
+// Para manejar los enlaces "Leer más" dentro del blog
+function addBlogLinksListeners() {
+  document.querySelectorAll('#blogContent a.btn-dark').forEach(link => {
+    link.onclick = function(e) {
+      e.preventDefault();
+      fetch(this.href)
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('blogContent').innerHTML = html;
+          addBlogLinksListeners();
+        });
+    };
+  });
+}

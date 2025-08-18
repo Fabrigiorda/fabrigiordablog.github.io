@@ -1,13 +1,13 @@
 <div class="embedded-blog">
     <div class="post-detail">
         <button class="back-btn" onclick="loadEmbeddedBlog()">← Volver al Blog</button>
-        
+
         <article class="post-article">
             <h1 class="post-title">{{ post.title }}</h1>
             <p class="post-meta">{{ post.author }} | {{ post.created_on|date:"d/m/Y" }}</p>
             <div class="post-content">{{ post.content|safe }}</div>
         </article>
-        
+
         <section class="comments-section">
             <h3>Comentarios ({{ comments.count }})</h3>
             {% for comment in comments %}
@@ -17,11 +17,10 @@
                 <p>{{ comment.body }}</p>
             </div>
             {% endfor %}
-            
+
             <form class="comment-form" method="post" action="{% url 'blog:embedded_detail' post.slug %}">
                 {% csrf_token %}
                 <input type="text" name="name" placeholder="Nombre" required>
-                <input type="email" name="email" placeholder="Email" required>
                 <textarea name="body" placeholder="Comentario" required></textarea>
                 <button type="submit">Enviar Comentario</button>
             </form>

@@ -12,29 +12,29 @@ class PostList(generic.ListView):
 class PostDetail(generic.DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = self.get_object()
         comments = post.comments.filter(active=True)
         comment_form = CommentForm()
-        
+
         context['post'] = post
         context['comments'] = comments
         context['comment_form'] = comment_form
         context['new_comment'] = False
         return context
-    
+
     def post(self, request, *args, **kwargs):
         post = self.get_object()
         comment_form = CommentForm(data=request.POST)
-        
+
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.post = post
             new_comment.save()
             return self.get(request, new_comment=True)
-        
+
         context = self.get_context_data()
         context['comment_form'] = comment_form
         return self.render_to_response(context)
@@ -71,9 +71,29 @@ def embedded_blog(request):
 def embedded_post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
     comments = post.comments.filter(active=True)
-    comment_form = CommentForm()
+
+
+    if request.method == 'POST':
+
+        comment_form = CommentForm(data=request.POST)
+
+        if comment_form.is_valid():
+
+            new_comment = comment_form.save(commit=False)
+
+            new_comment.post = post
+
+            new_comment.save()
+
+            comment_form = CommentForm()
+    else:
+
+        comment_form = CommentForm()
+
+
+    # Renderiza la plantilla con toda la información actualizada
     return render(request, 'blog/embedded_detail.html', {
         'post': post,
-        'comments': comments,
+        'comments': post.comments.filter(active=True), # Recarga los comentarios para incluir el nuevo
         'comment_form': comment_form
     })

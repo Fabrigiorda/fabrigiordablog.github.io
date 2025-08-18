@@ -8,18 +8,50 @@ document.querySelectorAll('.icono').forEach((btn, index) => {
       const ventana = document.getElementById(idVentana);
       ventana.style.display = 'flex';
       ventana.classList.remove('abriendo');
-      void ventana.offsetWidth; 
+      void ventana.offsetWidth;
       ventana.classList.add('abriendo');
       ventanasAbiertas[idVentana] = true;
+
+      // Si es la ventana del blog, cargar los posts
+      if (idVentana === 'ventana-blog') {
+        loadEmbeddedBlog();
+      }
     }
   });
 });
+
+// Nueva función para cargar el blog
+function loadEmbeddedBlog() {
+  fetch('/blog/embedded/')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('blogContent').innerHTML = html;
+      addEmbeddedBlogListeners();
+    });
+}
+
+// Nueva función para manejar los enlaces del blog embebido
+function addEmbeddedBlogListeners() {
+  document.querySelectorAll('.read-more-btn').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const slug = this.getAttribute('data-slug');
+      fetch(`/blog/embedded/${slug}/`)
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('blogContent').innerHTML = html;
+          addEmbeddedBlogListeners();
+        });
+    });
+  });
+}
+
 
 function cerrarVentana(id) {
   const ventana = document.getElementById(id);
   ventana.classList.remove('abriendo');
   ventana.classList.add('cerrando');
-  
+
   setTimeout(() => {
     ventana.style.display = 'none';
     ventana.classList.remove('cerrando');
@@ -35,7 +67,7 @@ const flechaDer = document.querySelector('.flecha-der');
 if (pista && flechaIzq && flechaDer) {
     const cuadrados = pista.querySelectorAll('.cuadrados');
     const totalCuadrados = cuadrados.length;
-    let anchoCuadrado = 260; 
+    let anchoCuadrado = 260;
     const gap = 30;
     let cuadradosPorVista = 3;
 
@@ -119,13 +151,13 @@ if (pista && flechaIzq && flechaDer) {
 
 document.querySelectorAll('.boton-repo.info').forEach((btn, index) => {
   btn.addEventListener('click', (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     const IdInfo = ['ventanaInfo-portfolio', 'ventanaInfo-calculadora', 'ventanaInfo-preguntados', 'ventanaInfo-space', 'ventanaInfo-photoshop'][index];
     if (!infosAbiertas[IdInfo]) {
       const ventana_info = document.getElementById(IdInfo);
       ventana_info.style.display = 'block';
       ventana_info.classList.remove('abriendo');
-      void ventana_info.offsetWidth; 
+      void ventana_info.offsetWidth;
       ventana_info.classList.add('abriendo');
       infosAbiertas[IdInfo] = true;
     }
@@ -153,3 +185,72 @@ document.addEventListener('click', (e) => {
     }
   });
 });
+
+function openBlogModal() {
+  document.getElementById('blogModal').style.display = 'block';
+  fetch('/blog/') // Ajusta la URL si tu blog está en otra ruta
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('blogContent').innerHTML = html;
+      addBlogLinksListeners();
+    });
+}
+
+function closeBlogModal() {
+  document.getElementById('blogModal').style.display = 'none';
+}
+
+// Para manejar los enlaces "Leer más" dentro del blog
+function addBlogLinksListeners() {
+  document.querySelectorAll('#blogContent a.btn-dark').forEach(link => {
+    link.onclick = function(e) {
+      e.preventDefault();
+      fetch(this.href)
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById('blogContent').innerHTML = html;
+          addBlogLinksListeners();
+        });
+    };
+  });
+}
+
+
+
+
+const blogContentDiv = document.getElementById('blogContent');
+
+if (blogContentDiv) {
+    // Escucha el evento 'submit' en el contenedor principal
+    blogContentDiv.addEventListener('submit', function(event) {
+
+        // Comprueba si el que se envió fue el formulario de comentarios
+        if (event.target.matches('.comment-form')) {
+
+            // 1. Previene la recarga de la página (¡la parte más importante!)
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const url = form.action;
+
+            // 2. Envía los datos en segundo plano con fetch
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+            })
+            .then(response => response.text()) // Convierte la respuesta (el HTML actualizado) a texto
+            .then(html => {
+                // 3. Reemplaza el contenido del blog con la versión actualizada
+                // que ya incluye el nuevo comentario.
+                blogContentDiv.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error al enviar el comentario:', error);
+            });
+        }
+    });
+}

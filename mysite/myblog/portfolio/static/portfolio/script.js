@@ -12,7 +12,7 @@ document.querySelectorAll('.icono').forEach((btn, index) => {
       ventana.classList.add('abriendo');
       ventanasAbiertas[idVentana] = true;
 
-      // Si es la ventana del blog, cargar los posts
+
       if (idVentana === 'ventana-blog') {
         loadEmbeddedBlog();
       }
@@ -20,7 +20,7 @@ document.querySelectorAll('.icono').forEach((btn, index) => {
   });
 });
 
-// Nueva función para cargar el blog
+
 function loadEmbeddedBlog() {
   fetch('/blog/embedded/')
     .then(response => response.text())
@@ -30,7 +30,7 @@ function loadEmbeddedBlog() {
     });
 }
 
-// Nueva función para manejar los enlaces del blog embebido
+
 function addEmbeddedBlogListeners() {
   document.querySelectorAll('.read-more-btn').forEach(link => {
     link.addEventListener('click', function(e) {
@@ -188,7 +188,7 @@ document.addEventListener('click', (e) => {
 
 function openBlogModal() {
   document.getElementById('blogModal').style.display = 'block';
-  fetch('/blog/') // Ajusta la URL si tu blog está en otra ruta
+  fetch('/blog/') 
     .then(response => response.text())
     .then(html => {
       document.getElementById('blogContent').innerHTML = html;
@@ -200,7 +200,7 @@ function closeBlogModal() {
   document.getElementById('blogModal').style.display = 'none';
 }
 
-// Para manejar los enlaces "Leer más" dentro del blog
+
 function addBlogLinksListeners() {
   document.querySelectorAll('#blogContent a.btn-dark').forEach(link => {
     link.onclick = function(e) {

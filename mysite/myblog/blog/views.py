@@ -91,9 +91,9 @@ def embedded_post_detail(request, slug):
         comment_form = CommentForm()
 
 
-    # Renderiza la plantilla con toda la información actualizada
+
     return render(request, 'blog/embedded_detail.html', {
         'post': post,
-        'comments': post.comments.filter(active=True), # Recarga los comentarios para incluir el nuevo
+        'comments': post.comments.filter(active=True), 
         'comment_form': comment_form
     })

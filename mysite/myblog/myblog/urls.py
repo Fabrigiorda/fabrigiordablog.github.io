@@ -19,8 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Cuando alguien vaya a /blog, usa las URLs de la app 'blog'
     path('blog/', include('blog.urls')),
-    # Cuando alguien vaya a la raíz del sitio, usa las URLs de la app 'portfolio'
     path('', include('portfolio.urls')),
 ]
